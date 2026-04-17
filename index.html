@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Birthday Surprise 🎂</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow-x: hidden;
+    position: relative;
+}
+
+/* Animated background particles */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+        radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+    pointer-events: none;
+    animation: float 20s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { opacity: 0.3; transform: translateY(0px); }
+    50% { opacity: 0.6; transform: translateY(-20px); }
+}
+
+.container {
+    width: 90%;
+    max-width: 500px;
+    position: relative;
+    z-index: 1;
+}
+
+.page {
+    display: none;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    padding: 40px 30px;
+    border-radius: 25px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    animation: fadeIn 0.5s ease-out;
+}
+
+.page.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+h2 {
+    color: #667eea;
+    font-size: clamp(24px, 5vw, 32px);
+    margin-bottom: 25px;
+    font-weight: 600;
+}
+
+button {
+    padding: 14px 30px;
+    margin: 10px;
+    border: none;
+    border-radius: 50px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    position: relative;
+    overflow: hidden;
+}
+
+button::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+button:hover::before {
+    width: 300px;
+    height: 300px;
+}
+
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+input {
+    padding: 14px 20px;
+    border-radius: 50px;
+    border: 2px solid #667eea;
+    width: 100%;
+    max-width: 280px;
+    font-size: 16px;
+    margin-bottom: 10px;
+    transition: all 0.3s ease;
+    outline: none;
+}
+
+input:focus {
+    border-color: #764ba2;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+video {
+    width: 100%;
+    max-width: 250px;
+    border-radius: 20px;
+    margin: 20px 0;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+/* Cake Container */
+.cake-container {
+    position: fixed;
+    bottom: -400px;
+    left: 50%;
+    transform: translateX(-50%);
+    transition: bottom 1s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    z-index: 10;
+}
+
+.cake-container.show {
+    bottom: 80px;
+}
+
+#birthday-cake {
+    position: relative;
+    transform: scale(0.6);
+}
+
+@media (min-width: 768px) {
+    #birthday-cake {
+        transform: scale(0.8);
+    }
+    .cake-container.show {
+        bottom: 100px;
+    }
+}
+
+/* Cake Layers */
+.cake {
+    position: absolute;
+    width: 350px;
+    left: 50%;
+    transform: translateX(-50%);
+    filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.3));
+}
+
+.cake-layer {
+    background: linear-gradient(to bottom, #ddb892 0%, #c9a579 100%);
+    height: 130px;
+    border-radius: 10px 10px 0 0;
+    position: relative;
+    border: 3px solid #b08968;
+}
+
+.cake-layer::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 10%;
+    right: 10%;
+    height: 15px;
+    background: repeating-linear-gradient(
+        90deg,
+        #ff69b4 0px,
+        #ff69b4 20px,
+        #fff 20px,
+        #fff 40px
+    );
+    border-radius: 5px;
+}
+
+.middle {
+    background: linear-gradient(to bottom, #b08968 0%, #9a7558 100%);
+    height: 50px;
+    margin-top: 130px;
+    border-radius: 8px 8px 0 0;
+    border: 3px solid #8b6f47;
+}
+
+.middle::after {
+    content: '';
+    position: absolute;
+    bottom: 50px;
+    left: 10%;
+    right: 10%;
+    height: 12px;
+    background: repeating-linear-gradient(
+        90deg,
+        #ffd700 0px,
+        #ffd700 20px,
+        #fff 20px,
+        #fff 40px
+    );
+    border-radius: 5px;
+}
+
+.top {
+    background: linear-gradient(to bottom, #7f5539 0%, #6b4423 100%);
+    height: 90px;
+    border-radius: 50%;
+    margin-top: 180px;
+    border: 3px solid #5d3a1a;
+    box-shadow: 0 -5px 20px rgba(255, 255, 255, 0.2) inset;
+}
+
+/* Candles */
+.candles {
+    width: 30px;
+    height: 100px;
+    position: absolute;
+    top: -180px;
+    left: 50%;
+    transform: translateX(-50%);
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.candles:hover {
+    transform: translateX(-50%) scale(1.05);
+}
+
+.candle {
+    width: 15px;
+    height: 80px;
+    background: linear-gradient(to right, #ff6b9d 0%, #ffa5c1 50%, #ff6b9d 100%);
+    border-radius: 3px;
+    position: absolute;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.candle.c1 { left: -40px; }
+.candle.c2 { left: 7px; }
+.candle.c3 { right: -40px; }
+
+.flame {
+    width: 20px;
+    height: 30px;
+    background: linear-gradient(to top, #ffd700 0%, #ff6b35 50%, #ff4500 100%);
+    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+    position: absolute;
+    top: -25px;
+    left: 50%;
+    transform: translateX(-50%);
+    animation: flicker 0.3s infinite alternate;
+    box-shadow: 
+        0 0 10px #ff6b35,
+        0 0 20px #ff4500,
+        0 0 30px #ffd700;
+    transition: opacity 0.5s ease;
+}
+
+.candle.c1 .flame { left: calc(50% - 40px); }
+.candle.c2 .flame { left: calc(50% + 7px); }
+.candle.c3 .flame { left: calc(50% + 50px); }
+
+@keyframes flicker {
+    0% { 
+        transform: translateX(-50%) scale(1) translateY(0);
+        opacity: 1;
+    }
+    50% {
+        transform: translateX(-50%) scale(1.1, 0.95) translateY(-2px);
+        opacity: 0.9;
+    }
+    100% { 
+        transform: translateX(-50%) scale(0.95, 1.05) translateY(2px);
+        opacity: 1;
+    }
+}
+
+/* Birthday Text */
+.text {
+    color: #667eea;
+    font-size: clamp(24px, 6vw, 36px);
+    font-weight: bold;
+    margin-top: 30px;
+    opacity: 0;
+    transition: opacity 1s ease;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+    animation: rainbow 3s linear infinite;
+}
+
+.text.show {
+    opacity: 1;
+}
+
+@keyframes rainbow {
+    0% { color: #667eea; }
+    25% { color: #764ba2; }
+    50% { color: #f093fb; }
+    75% { color: #4facfe; }
+    100% { color: #667eea; }
+}
+
+/* Confetti */
+.confetti {
+    position: fixed;
+    width: 12px;
+    height: 12px;
+    top: -20px;
+    animation: fall 3s linear forwards;
+    z-index: 1000;
+    border-radius: 2px;
+}
+
+@keyframes fall {
+    to {
+        transform: translateY(100vh) rotate(720deg);
+        opacity: 0;
+    }
+}
+
+/* Error Message */
+#error {
+    color: #e74c3c;
+    margin-top: 15px;
+    font-weight: 500;
+    animation: shake 0.5s;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-10px); }
+    75% { transform: translateX(10px); }
+}
+
+/* Back Button */
+.back-btn {
+    position: absolute;
+    left: 20px;
+    top: 20px;
+    background: rgba(102, 126, 234, 0.2);
+    padding: 10px 20px;
+    font-size: 14px;
+}
+
+.back-btn:hover {
+    background: rgba(102, 126, 234, 0.3);
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+    .page {
+        padding: 30px 20px;
+    }
+    
+    button {
+        padding: 12px 24px;
+        font-size: 14px;
+        margin: 8px;
+    }
+    
+    #birthday-cake {
+        transform: scale(0.5);
+    }
+    
+    .cake-container.show {
+        bottom: 60px;
+    }
+}
+
+/* Loading animation for lock screen */
+.lock-icon {
+    font-size: 60px;
+    margin-bottom: 20px;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.1); opacity: 0.8; }
+}
+
+/* Gift box animation */
+.gift-options {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+@media (min-width: 768px) {
+    .gift-options {
+        flex-direction: row;
+        justify-content: center;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<!-- LOCK PAGE -->
+<div id="lock" class="page active">
+    <div class="lock-icon">🔒</div>
+    <h2>Enter Password</h2>
+    <input type="password" id="pass" placeholder="Enter password..." autocomplete="off">
+    <br>
+    <button onclick="checkPass()">Unlock</button>
+    <p id="error"></p>
+    <video autoplay loop muted playsinline >
+        <source src="https://media.tenor.com/nBQQ6XM5BhIAAAPo/cute.mp4" type="video/mp4">
+        <source src="https://media.tenor.com/nBQQ6XM5BhIAAAPs/cute.webm" type="video/webm">
+    </video>
+</div>
+
+<!-- QUESTION PAGE -->
+<div id="q" class="page">
+    <h2>Do you want a surprise? 🎁</h2>
+    <button onclick="show('gift')">Yes, Please! 🎉</button>
+    <button onclick="show('no')">No, Thanks 🤔</button>
+</div>
+
+<!-- NO PAGE -->
+<div id="no" class="page">
+    <h2>How dare you! 😤</h2>
+    <video autoplay loop muted playsinline>
+        <source src="https://media.tenor.com/X0AU4rFwjYsAAAPo/mochi-cat-mad-cat.mp4" type="video/mp4">
+    </video>
+    <br>
+    <button onclick="show('q')">⬅ Back</button>
+</div>
+
+<!-- GIFTS PAGE -->
+<div id="gift" class="page">
+    <h2>Choose Your Gift 🎁</h2>
+    <div class="gift-options">
+        <button onclick="show('try')">🎁 Gift 1</button>
+        <button onclick="show('cakePage')">🎂 Gift 2</button>
+        <button onclick="show('try')">🎁 Gift 3</button>
+    </div>
+</div>
+
+<!-- TRY AGAIN PAGE -->
+<div id="try" class="page">
+    <h2>Oops! Try Again 😜</h2>
+    <video autoplay loop muted playsinline>
+        <source src="https://media.tenor.com/rwRBwBII9hwAAAPo/airallia-cat-chan.mp4" type="video/mp4">
+    </video>
+    <br>
+    <button onclick="show('gift')">⬅ Back to Gifts</button>
+</div>
+
+<!-- CAKE PAGE -->
+<div id="cakePage" class="page">
+    <button onclick="show('gift')" class="back-btn">⬅ Back</button>
+    
+    
+    <div class="text" id="bdayText">🎉 Happy Birthday! 🎉
+        <video preload="auto" loop="" autoplay="" id="content" width="300px" height="300px"><source src="https://media.tenor.com/bh9MAiCpL6wAAAPo/birthday-cake.mp4" type="video/mp4"><source src="https://media.tenor.com/bh9MAiCpL6wAAAPs/birthday-cake.webm" type="video/webm"></video>
+    </div>
+    
+    <br><br>
+    <button onclick="blowCandles()">Click me</button>
+</div>
+
+</div>
+
+<script>
+const correct = "mysis";
+
+function show(id) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    const page = document.getElementById(id);
+    page.classList.add('active');
+    
+    // Reset cake animations when leaving cake page
+    if (id !== 'cakePage') {
+        document.getElementById('cakeBox').classList.remove('show');
+        document.getElementById('bdayText').classList.remove('show');
+        document.querySelectorAll('.flame').forEach(f => f.style.opacity = "1");
+    }
+    
+    if (id === "cakePage") {
+        setTimeout(() => {
+            document.getElementById('cakeBox').classList.add('show');
+        }, 300);
+    }
+}
+
+function checkPass() {
+    const p = document.getElementById('pass').value.trim();
+    const errorEl = document.getElementById('error');
+    
+    if (p === correct) {
+        errorEl.innerText = "";
+        show('q');
+    } else {
+        errorEl.innerText = "❌ Wrong password, try again!";
+        document.getElementById('pass').value = "";
+        document.getElementById('pass').focus();
+    }
+}
+
+function blowCandles() {
+    const flames = document.querySelectorAll('.flame');
+    
+    // Blow out candles with stagger effect
+    flames.forEach((f, index) => {
+        setTimeout(() => {
+            f.style.opacity = "0";
+        }, index * 150);
+    });
+    
+    // Show birthday message
+    setTimeout(() => {
+        document.getElementById('bdayText').classList.add('show');
+    }, 500);
+    
+    // Create confetti
+    setTimeout(() => {
+        createConfetti();
+    }, 700);
+}
+
+function createConfetti() {
+    const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#f9ca24', '#f0932b', '#eb4d4b', '#6ab04c', '#c44569'];
+    const confettiCount = 60;
+    
+    for (let i = 0; i < confettiCount; i++) {
+        setTimeout(() => {
+            const confetti = document.createElement("div");
+            confetti.className = "confetti";
+            confetti.style.left = Math.random() * 100 + "vw";
+            confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+            confetti.style.animationDelay = Math.random() * 0.5 + "s";
+            confetti.style.animationDuration = (Math.random() * 2 + 2) + "s";
+            document.body.appendChild(confetti);
+            
+            setTimeout(() => confetti.remove(), 4000);
+        }, i * 50);
+    }
+}
+
+// Allow Enter key to submit password
+document.getElementById('pass').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+        checkPass();
+    }
+});
+</script>
+
+</body>
+</html>
