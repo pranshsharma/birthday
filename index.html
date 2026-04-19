@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Security Page</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="box">
+        <h2>Enter Password</h2>
+
+        <input type="password" id="password" placeholder="Enter password">
+        <button onclick="checkPassword()">Submit</button>
+
+        <div id="message"></div>
+
+        <div id="gif" class="tenor-gif-embed" data-postid="11414695024558705762" data-share-method="host" data-aspect-ratio="1" data-width="200px">
+            <a href="https://tenor.com/view/cute-gif-11414695024558705762"></a>
+            <a href="https://tenor.com/search/cute-stickers"></a>
+        </div> 
+        <script type="text/javascript" async src="https://tenor.com/embed.js"></script>
+    </div>
+  <script>
+    function checkPassword() {
+      const correctPassword = "12345";
+      const input = document.getElementById("password").value;
+      const gif = document.getElementById("gif");
+      const message = document.getElementById("message");
+
+      if (input === correctPassword) {
+        gif.style.display = "none";
+        message.style.color = "green";
+        message.textContent = "Access Granted!";
+        window.location.href = "home.html";
+      } else {
+        gif.style.display = "block";
+        message.style.color = "red";
+        message.textContent = "Wrong Password!";
+      }
+    }
+  </script>
+
+</body>
+</html>
