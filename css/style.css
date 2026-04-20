@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Birthstone&display=swap');
 html{
-    background-image: url("Assets/background3.jpg");
+    background-image: url("https://images.unsplash.com/photo-1635776063328-153b13e3c245?q=80&w=1032&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
     background-size: cover;       
     background-repeat: no-repeat; 
     background-position: center; 
@@ -97,4 +97,13 @@ button:active{
         0 1px 20px rgba(0, 0, 0, 0.3)
     ;
     border-radius: 20px;
+    animation:up .5s;
 }
+@keyframes up{
+        from {
+            transform: translatey(1000px);
+        }
+        to{
+            transform: translateY(0);
+        }
+    }
